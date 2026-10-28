@@ -1,0 +1,43 @@
+name: Experimental training - Mendeley v3
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/experimental_training.yml'
+      - 'tools/download_mendeley.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  experimental-training:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install research package
+        run: python -m pip install -e .
+      - name: Download original experimental Mendeley v3 ZIP
+        run: python tools/download_mendeley.py --output /tmp/photoniq_experimental_v3.zip
+      - name: Audit source and label joins before fitting
+        run: python -m photoniq audit --archive /tmp/photoniq_experimental_v3.zip
+      - name: Train on measured spectra (not test fixtures)
+        run: |
+          python -m photoniq train --archive /tmp/photoniq_experimental_v3.zip \
+            --output runs/experimental_v3_seed42 --epochs 150 --patience 20 \
+            --bootstrap-iterations 1000 --seed 42 --device cpu
+      - name: Package reproducible numeric results (no original raw data)
+        if: success()
+        run: |
+          mkdir -p publication_results
+          cp runs/experimental_v3_seed42/{test_metrics.csv,test_predictions.csv,conformal_evaluation.json,run_metadata.json,data_audit.json,split_manifest.csv,learning_curve.csv} publication_results/
+          cp /tmp/photoniq_experimental_v3.provenance.json publication_results/source_provenance.json
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: photoniq-experimental-v3-seed42
+          path: publication_results/
+          retention-days: 90
