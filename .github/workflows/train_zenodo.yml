@@ -1,0 +1,35 @@
+name: Train real Zenodo optical-density CNN
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/train_zenodo.yml', 'tools/train_zenodo.py']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  experimental-benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned CPU scientific stack
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas scikit-learn 'torch==2.5.1' --index-url https://pypi.org/simple
+      - name: Download original public experimental data
+        run: |
+          curl -fL --retry 2 --connect-timeout 15 --max-time 100 \
+            'https://zenodo.org/records/19237616/files/Dataset.zip?download=1' \
+            -o /tmp/zenodo_perovskite_2026.zip
+      - name: Train baselines and CNN with fabrication-date holdout
+        run: python tools/train_zenodo.py /tmp/zenodo_perovskite_2026.zip results/zenodo_2026
+      - name: Upload numerical results and metadata
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: photoniq-zenodo-real-experimental-results
+          path: results/zenodo_2026/
+          retention-days: 90
