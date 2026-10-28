@@ -1,0 +1,21 @@
+{
+  "source": "Out-of-fold sample-level predictions; one prediction per film",
+  "cluster_variable": "fabrication_date",
+  "n_clusters": 20,
+  "n_resamples": 10000,
+  "percentile_intervals": {
+    "CNN_MAE_nm": {
+      "p2.5": 56.728780634186904,
+      "p97.5": 105.77241166226865
+    },
+    "Ridge_MAE_nm": {
+      "p2.5": 75.55644606020047,
+      "p97.5": 146.2710697917356
+    },
+    "CNN_vs_Ridge_MAE_reduction_pct": {
+      "p2.5": 3.0413790227123654,
+      "p97.5": 44.324204258449775
+    }
+  },
+  "interpretation": "Descriptive 95% bootstrap percentile intervals, not confidence guarantees for new labs."
+}

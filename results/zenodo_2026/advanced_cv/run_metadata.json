@@ -1,0 +1,40 @@
+{
+  "original_dataset_rows": 517,
+  "original_spectral_columns": 517,
+  "valid_joined_films": 517,
+  "discarded_rows": 0,
+  "distinct_fabrication_dates": 20,
+  "n_wavelengths": 351,
+  "wavelength_min_nm": 300.0,
+  "wavelength_max_nm": 1000.0,
+  "source_sha256": "c79b616d2c998977557cf72017c00f10b60a953570fe939932d025b208a2eb62",
+  "source_doi": "10.5281/zenodo.19237616",
+  "raw_data_used_as_model_inputs": "curvedata_opticaldensity.csv only",
+  "excluded_target_derived_features": "Perovskite_ODint_* and Perovskite_thickness_nm",
+  "raw_optical_curves_interpolation": "per-film, no cross-film statistics",
+  "missing_spectral_values_filled": 2400,
+  "validation_method": "5-fold GroupKFold over fabrication dates, with group-disjoint inner validation",
+  "budgets": [
+    16,
+    32,
+    64,
+    128,
+    256,
+    351
+  ],
+  "seed": 42,
+  "folds": 5,
+  "outer_split": "GroupKFold grouped on fabrication date",
+  "inner_validation": "GroupShuffleSplit on development fabrication dates, random_state=42+fold",
+  "spectral_budgets": "uniform wavelengths selected independently for every training and inference run",
+  "training": "Independent CNN trained per fold and per budget; AdamW lr=0.001, 150 max epochs, patience 20",
+  "test_protocol": "Every film predicted exactly once by an unseen-date fold",
+  "software_version": {
+    "python": "3.13.5",
+    "torch": "2.10.0+cpu",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "sklearn": "1.8.0"
+  },
+  "publication_caution": "Not prospective, no external laboratory, no calibrated production metrology."
+}

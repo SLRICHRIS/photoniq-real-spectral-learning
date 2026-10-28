@@ -1,0 +1,8 @@
+{
+  "verified": true,
+  "test_samples": 517,
+  "fabrication_date_groups": 20,
+  "number_of_models": 14,
+  "folds": 5,
+  "method": "all 517 specimens have exactly one held-out-date prediction; no date overlaps in train/val/test; all scores recomputed"
+}

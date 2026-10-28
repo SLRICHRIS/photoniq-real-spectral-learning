@@ -2,7 +2,7 @@
 
 ### Experimental spectral learning for perovskite thin-film thickness
 
-**Physics-respecting research discipline, real measured spectra, reproducible Colab training.** PhotonIQ learns a regression relationship between experimental UV–Vis spectral measurements and independently measured thin-film thickness. It compares a compact **mask-aware 1D CNN** with conventional regression baselines, evaluates missing-wavelength robustness, and reports uncertainty at the **physical-film** level.
+**Real measured optical spectra, grouped validation, reproducible Python training.** PhotonIQ benchmarks experimental thin-film thickness inference with conventional regression and 1D CNNs. The **Zenodo v2 benchmark** performs complete fabrication-date holdout and independently retrains models with reduced wavelength budgets. A **separate Mendeley/Colab implementation** includes mask-aware modeling but is not yet validated on its intended real data.
 
 > **Status:** A real-data baseline and 1D CNN experiment was successfully trained and evaluated on the [Zenodo perovskite optical-density dataset](https://zenodo.org/records/19237616) (517 measured films). The separate Mendeley experiment described in the Colab notebook remains pending because automated source retrieval returned HTTP 401. Do not mix the results of these two datasets.
 
@@ -29,7 +29,38 @@ PhotonIQ is a student-developed software research project undertaken in connecti
 
 We do **not** pre-claim novelty or model superiority. A competing Ridge regressor might be better on a small experimental collection; PhotonIQ reports this transparently.
 
-## Results — real experimental optical-density spectra
+## Advanced results — fabrication-date cross-validation
+
+PhotonIQ v2 now reports **five-fold grouped evaluation** on the original [Zenodo measured optical-density dataset](https://zenodo.org/records/19237616). All **517 films** receive exactly one prediction from a fold whose **fabrication dates were held out**; **20 dates** are covered. This is a tougher and more informative test than the earlier single-split 50.91 nm result.
+
+| Out-of-fold model | MAE (nm) ↓ | RMSE (nm) ↓ | R² ↑ |
+|---|---:|---:|---:|
+| Training mean | 172.77 | 234.62 | −0.048 |
+| Three direct optical-density statistics + Ridge | 118.80 | 191.08 | 0.305 |
+| Ridge, full 351 wavelengths | 106.71 | 180.48 | 0.380 |
+| **CNN, full 351 wavelengths** | **78.03** | **138.23** | **0.636** |
+| **CNN, uniformly sampled 64 wavelengths** | **69.28** | **127.95** | **0.688** |
+
+The **full-spectrum CNN improves MAE by 26.9% over full-spectrum Ridge** on these out-of-fold predictions. The 64-wavelength CNN used **18.2% of the original spectral channels**, but its superiority to the full model is *exploratory*: we compared six budgets on the same cross-validation folds, without a second untouched dataset for choosing the best budget.
+
+![Spectral channel budget versus MAE](results/zenodo_2026/advanced_cv/sparse_wavelength_tradeoff.svg)
+
+![Overall model comparison](results/zenodo_2026/advanced_cv/model_comparison.svg)
+
+**Reliability matters:** Date-clustered bootstrap (10,000 resamples over 20 fabrication dates) gave a descriptive full-CNN MAE interval of **56.73–105.77 nm**, not a validated prospective confidence guarantee. Films thicker than 600 nm have **126.38 nm MAE** and **−60.86 nm mean bias**; some fabrication dates show much larger errors. We do not claim generalization to other compositions, laboratories or instruments.
+
+**Reproducible files:** [complete five-fold report, subgroup diagnostics, out-of-fold predictions and six charts](results/zenodo_2026/advanced_cv/README.md) · [testable training source](tools/advanced_benchmark.py) · [metric verifier](tools/verify_advanced_results.py) · [GitHub Actions workflow](.github/workflows/advanced_benchmark.yml). Trained per-fold checkpoints are distributed through workflow artifacts, not committed as binaries.
+
+To reproduce from the public Zenodo archive:
+
+```bash
+python tools/advanced_benchmark.py /path/to/zenodo-Dataset.zip results/zenodo_2026/advanced_cv --folds 5 --epochs 150 --bootstrap 10000
+python tools/verify_advanced_results.py results/zenodo_2026/advanced_cv
+```
+
+The earlier single-split experiment and the distinct Mendeley Colab workflow remain documented below. **Do not combine their scores with this cross-validation experiment.**
+
+## Earlier single-split results — historical reference
 
 **Completed 28 October 2026** on the independently published [Zenodo dataset (DOI: 10.5281/zenodo.19237616)](https://zenodo.org/records/19237616). Source archive SHA-256: `c79b616d2c998977557cf72017c00f10b60a953570fe939932d025b208a2eb62`.
 
