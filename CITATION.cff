@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, cite the original experimental dataset and source paper; cite this repository as software separately."
+title: "PhotonIQ: experimental spectral learning for perovskite thin films"
+type: software
+version: 1.0.0
+license: MIT
+date-released: 2026-10-28
+references:
+  - type: dataset
+    title: Perovskite-Thin-Films
+    authors:
+      - family-names: Harth
+        given-names: Milan
+      - family-names: Vesce
+        given-names: Luigi
+    doi: 10.17632/zt2j5j4v44.3
+    year: 2023

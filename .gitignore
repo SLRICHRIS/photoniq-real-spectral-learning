@@ -1,0 +1,22 @@
+# Never commit third-party raw experimental spectra or label workbooks
+*.zip
+*.xlsx
+*.xls
+*.h5
+*.npz
+*.pkl
+*.joblib
+*.pt
+raw/
+data/raw/
+runs/
+outputs/
+source_dataset/
+extracted_original_dataset/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+.env
+.DS_Store

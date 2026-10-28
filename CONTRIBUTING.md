@@ -1,0 +1,3 @@
+# Contributing
+
+Keep original experimental files outside Git. Every feature must have a documented source, units, and no target leakage. Keep all positions of one film in the same evaluation group. A new model must include a conventional baseline; new metrics must include independent-film counts. Add tests for dataset parsing and split invariants. Do not edit the generated Colab notebook directly: edit `src/` then rebuild with `python tools/build_colab.py`. If revising data parser assumptions, compare against the original dataset and original authors' published code. Avoid inventing results in README or figures.
