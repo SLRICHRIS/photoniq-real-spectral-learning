@@ -6,6 +6,14 @@
 
 > **Status:** A real-data baseline and 1D CNN experiment was successfully trained and evaluated on the [Zenodo perovskite optical-density dataset](https://zenodo.org/records/19237616) (517 measured films). The separate Mendeley experiment described in the Colab notebook remains pending because automated source retrieval returned HTTP 401. Do not mix the results of these two datasets.
 
+## Visual research dashboard
+
+**[Explore the PhotonIQ pipeline and verified results](dashboard/)** · [Open dashboard source](dashboard/index.html) · [Dashboard documentation](dashboard/README.md)
+
+The dependency-free interactive dashboard explains the **seven-stage measured-spectra → data validation → held-out-date evaluation → model training → diagnostics** workflow. It also compares 16–351 wavelength budgets, exposes held-out MAE/RMSE/R² and provides subgroup error tables and provenance links. **The dashboard displays a frozen, validated experimental result snapshot**—it does not run models, stream telemetry, or monitor training live.
+
+To use it locally, open `dashboard/index.html` in a browser. To host it through GitHub Pages, use the `main / (root)` publishing source in repository settings; the root `index.html` redirects to the dashboard. Do **not** claim a public URL until Pages is enabled and verified.
+
 ## Course context
 
 **Course:** Optoelectronic Materials & Devices (23ECE353)  

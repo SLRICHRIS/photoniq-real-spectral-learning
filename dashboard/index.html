@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#f8f9fc"/>
+  <meta name="description" content="PhotonIQ: a transparent interactive research dashboard for experimental perovskite thin-film thickness regression and grouped validation."/>
+  <title>PhotonIQ | Experiment Dashboard</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <a class="identity" href="#overview" aria-label="PhotonIQ overview"><span class="brand-symbol">P<span class="brand-pixel"></span></span><span class="brand-text"><strong>PhotonIQ</strong><span>Research dashboard</span></span></a>
+    <div class="nav-section">WORKSPACE</div>
+    <nav class="navigation" aria-label="Dashboard sections">
+      <button class="nav-item active" type="button" data-page="overview" aria-current="page"><span class="nav-icon">◫</span> Overview</button>
+      <button class="nav-item" type="button" data-page="pipeline"><span class="nav-icon">◇</span> Pipeline explorer</button>
+      <button class="nav-item" type="button" data-page="results"><span class="nav-icon">▥</span> Model results</button>
+      <button class="nav-item" type="button" data-page="diagnostics"><span class="nav-icon">⌕</span> Error diagnostics</button>
+      <button class="nav-item" type="button" data-page="reproducibility"><span class="nav-icon">≡</span> Reproducibility</button>
+    </nav>
+    <div class="sidebar-lower">
+      <div class="status-compact"><span class="status-mark"></span><strong>Verified experiment</strong><span>Frozen result snapshot</span><small>28 October 2026</small></div>
+      <a class="outside-link" href="https://github.com/SLRICHRIS/photoniq-real-spectral-learning" target="_blank" rel="noopener noreferrer">Open source repository <span>↗</span></a>
+      <p class="side-note">Real measured spectra. No fabricated results. Not a live instrument monitor.</p>
+    </div>
+  </aside>
+
+  <div class="main-shell">
+    <header class="topbar"><span class="eyebrow">PHOTONIQ <span class="slash">/</span> EXPERIMENTAL VALIDATION</span><span class="topbar-right"><span class="top-dot"></span> Reproducible snapshot <span class="top-date">28 OCT 2026</span></span></header>
+    <main class="workspace">
+      <section class="page active" id="overview" aria-labelledby="overview-title">
+        <div class="page-heading"><div><div class="kicker">EXPERIMENT AT A GLANCE <span class="kicker-rule"></span> V2.0</div><h1 id="overview-title">From optical spectra<br>to film thickness.</h1><p>See what the model learned, how it was evaluated, and where its predictions still fail. Every metric comes from the published five-fold experimental run.</p></div><a class="subtle-action" href="https://github.com/SLRICHRIS/photoniq-real-spectral-learning/tree/main/results/zenodo_2026/advanced_cv" target="_blank" rel="noopener noreferrer">Inspect source results ↗</a></div>
+        <div class="notice"><span class="notice-icon">i</span><span><strong>Measured data · historical results.</strong> This dashboard shows a verified, saved experiment, not live sensor telemetry or real-time model training. The earlier Mendeley experiment remains untrained.</span></div>
+        <div class="metrics-grid">
+          <div class="metric"><span class="metric-label">Measured films</span><span class="metric-value" id="filmCount">517</span><span class="metric-foot">Independent specimen records</span></div>
+          <div class="metric"><span class="metric-label">Fabrication groups</span><span class="metric-value" id="dateCount">20</span><span class="metric-foot">Held out by date across folds</span></div>
+          <div class="metric"><span class="metric-label">Full-spectrum CNN · MAE</span><span class="metric-value" id="fullMAE">78.03<span class="metric-unit"> nm</span></span><span class="metric-foot">Pooled out-of-fold error</span></div>
+          <div class="metric standout"><span class="metric-label">Best observed sparse model</span><span class="metric-value" id="sparseMAE">69.28<span class="metric-unit"> nm</span></span><span class="metric-foot">64/351 wavelength channels · exploratory</span></div>
+        </div>
+        <div class="section-header"><div><h2>Research pipeline</h2><p>From experimental measurement to held-out-date predictions</p></div><button class="inline-link" type="button" data-goto="pipeline">Explore all stages ↗</button></div>
+        <div class="pipeline-strip" id="overviewStrip" aria-label="Pipeline sequence"></div>
+        <div class="two-cols">
+          <div class="panel"><div class="panel-head"><div><span class="section-tag">01 / PERFORMANCE</span><h3>How models compare</h3></div><span class="fine-note">MAE · lower is better</span></div><div id="overviewModelBars" class="model-bars"></div><div class="panel-bottom">All 517 films receive exactly one out-of-fold prediction.</div></div>
+          <div class="panel insight-panel"><div><span class="section-tag">02 / RESEARCH FINDING</span><h3>Fewer channels, stronger signal?</h3><p>The 64-wavelength CNN achieved the lowest observed error across tested budgets. It used <strong>18.2%</strong> of the full 351 channels, but this is exploratory rather than a proven optimum.</p></div><div class="insight-stat"><strong>64 <small>/ 351</small></strong><span>Observed spectral budget</span></div><button class="inline-link" type="button" data-goto="results">Compare wavelength budgets ↗</button></div>
+        </div>
+      </section>
+
+      <section class="page" id="pipeline" aria-labelledby="pipeline-title" hidden>
+        <div class="page-heading"><div><div class="kicker">METHOD / TRACEABLE EXECUTION</div><h1 id="pipeline-title">The full research pipeline.</h1><p>Select a stage to inspect its input, operation, safeguards and outputs. The pipeline reflects the completed Zenodo study—not the unfinished Mendeley notebook.</p></div></div>
+        <div class="panel pipeline-panel"><div class="panel-head"><div><span class="section-tag">END-TO-END EXPERIMENT</span><h3>Seven auditable stages</h3></div><span class="fine-note">Select any stage</span></div><div id="stages" class="stages" role="tablist" aria-label="Pipeline stage details"></div><div class="stage-detail" id="stageDetail" role="tabpanel" aria-live="polite"></div></div>
+        <div class="section-header"><div><h2>Validation boundaries</h2><p>The safeguards that protect the interpretation of the results</p></div></div>
+        <div class="guard-grid"><div class="guard"><span>01</span><strong>Dates do not cross splits</strong><p>Films fabricated on the same date stay together in the corresponding train, validation or test partitions.</p></div><div class="guard"><span>02</span><strong>Fit transformations on training data</strong><p>Spectral scaling and target normalization are learned from the training partition within each fold.</p></div><div class="guard"><span>03</span><strong>Independent spectral budgets</strong><p>Each 16–351-channel CNN is fitted on only the observed channels for that configuration.</p></div><div class="guard"><span>04</span><strong>No target-derived optical features</strong><p>Thickness and any spectral descriptors computed using thickness are excluded from the model input.</p></div></div>
+      </section>
+
+      <section class="page" id="results" aria-labelledby="results-title" hidden>
+        <div class="page-heading"><div><div class="kicker">OUT-OF-FOLD / 517 FILMS</div><h1 id="results-title">Model results.</h1><p>Compare linear regression and separately trained 1D CNNs across the full set of spectral acquisition budgets.</p></div><a class="subtle-action" href="https://github.com/SLRICHRIS/photoniq-real-spectral-learning/blob/main/results/zenodo_2026/advanced_cv/cross_validation_summary.csv" target="_blank" rel="noopener noreferrer">Raw metric CSV ↗</a></div>
+        <div class="panel chart-panel"><div class="panel-head wrap-head"><div><span class="section-tag">WAVELENGTH EFFICIENCY</span><h3>Accuracy versus spectral resolution</h3></div><div class="controls"><div class="segmented" role="group" aria-label="Select result metric"><button type="button" class="selected" data-metric="MAE_nm">MAE</button><button type="button" data-metric="RMSE_nm">RMSE</button><button type="button" data-metric="R2">R²</button></div><label class="filter-label">Method <select id="methodFilter"><option value="both">CNN & Ridge</option><option value="cnn">CNN only</option><option value="ridge">Ridge only</option></select></label></div></div><div id="budgetChart" class="budget-chart" aria-label="Wavelength budget performance chart"></div><div class="chart-foot"><span><i class="legend-dot cnn"></i> 1D CNN</span><span><i class="legend-dot ridge"></i> Ridge regression</span><span class="fine-note">Metrics are pooled over held-out fabrication dates.</span></div></div>
+        <div class="panel"><div class="panel-head"><div><span class="section-tag">FULL RESULTS TABLE</span><h3>Inspect exact scores</h3></div><span class="fine-note">Click a row to highlight the model above</span></div><div class="table-scroll"><table><thead><tr><th>Model</th><th>Channels</th><th>MAE (nm)</th><th>RMSE (nm)</th><th>R²</th></tr></thead><tbody id="resultsTable"></tbody></table></div></div>
+      </section>
+
+      <section class="page" id="diagnostics" aria-labelledby="diagnostics-title" hidden>
+        <div class="page-heading"><div><div class="kicker">MODEL RELIABILITY / LIMITATIONS</div><h1 id="diagnostics-title">Where predictions fail.</h1><p>Investigate thick-film underestimation, fabrication-date variability, substrate differences and experimental conditions. These are descriptive analyses, not causal claims.</p></div></div>
+        <div class="notice warning"><span class="notice-icon">!</span><span><strong>Important limitation.</strong> The full-spectrum CNN underestimates films thicker than 600 nm by 60.86 nm on average. Errors vary significantly by fabrication date.</span></div>
+        <div class="metrics-grid metrics-grid-3"><div class="metric"><span class="metric-label">Films above 600 nm</span><span class="metric-value">117</span><span class="metric-foot">Thick-film subgroup</span></div><div class="metric"><span class="metric-label">Thick-film MAE</span><span class="metric-value">126.38 <span class="metric-unit">nm</span></span><span class="metric-foot">Full-spectrum CNN</span></div><div class="metric"><span class="metric-label">Date-clustered 95% range*</span><span class="metric-value small-value">56.73–105.77 <span class="metric-unit">nm</span></span><span class="metric-foot">Descriptive CNN MAE bootstrap</span></div></div>
+        <div class="panel"><div class="panel-head wrap-head"><div><span class="section-tag">STRATIFIED ERROR AUDIT</span><h3>Compare subgroups</h3></div><label class="filter-label">Breakdown <select id="diagnosticFilter"><option value="thickness_bin">Film thickness</option><option value="fabrication_date">Fabrication date</option><option value="substrate">Substrate</option><option value="humidity_bin">Relative humidity</option><option value="blade_temperature_bin">Blade temperature</option></select></label></div><div class="table-scroll"><table><thead><tr><th>Group</th><th>Films</th><th>CNN MAE (nm)</th><th>CNN bias (nm)</th><th>Ridge MAE (nm)</th></tr></thead><tbody id="diagnosticTable"></tbody></table></div><div class="panel-bottom">Bias = prediction − measured thickness. Positive values mean overestimation. Small groups are unstable.</div></div>
+        <div class="two-cols"><div class="panel"><span class="section-tag">UNCERTAINTY</span><h3>What the bootstrap means</h3><p>10,000 resamples of the 20 fabrication-date groups produce a descriptive 95% percentile interval for CNN MAE. It is <strong>not</strong> a calibrated guarantee for new labs, instruments or materials.</p></div><div class="panel"><span class="section-tag">EXTERNAL VALIDITY</span><h3>What remains untested</h3><p>No independent laboratory, new optical instrument, cross-composition dataset, or prospective deployment has been validated. The original Mendeley study is still pending.</p></div></div>
+      </section>
+
+      <section class="page" id="reproducibility" aria-labelledby="repro-title" hidden>
+        <div class="page-heading"><div><div class="kicker">SOURCE OF TRUTH / REPRODUCIBLE</div><h1 id="repro-title">Audit the experiment.</h1><p>Follow every published metric back to the dataset, code, held-out fold assignments and reproducible GitHub Actions run.</p></div></div>
+        <div class="panel"><div class="panel-head"><div><span class="section-tag">RUN MANIFEST</span><h3>Provenance</h3></div><span class="status-mini">Snapshot, not live</span></div><dl class="definition-grid"><div><dt>Experiment</dt><dd>PhotonIQ v2 · Zenodo GroupKFold</dd></div><div><dt>Dataset DOI</dt><dd><a href="https://doi.org/10.5281/zenodo.19237616" target="_blank" rel="noopener noreferrer">10.5281/zenodo.19237616 ↗</a></dd></div><div><dt>Original dataset SHA-256</dt><dd><code id="shaValue" class="sha"></code><button type="button" class="copy-mini" id="copyHash" title="Copy checksum">Copy</button></dd></div><div><dt>Split strategy</dt><dd>5-fold GroupKFold · 20 fabrication dates</dd></div><div><dt>Experimental film count</dt><dd>517 · 351 optical-density wavelength channels</dd></div><div><dt>Training randomness</dt><dd>Seed 42 · train-only normalization</dd></div><div><dt>Reproduction checks</dt><dd>Fold integrity + independent metric recomputation</dd></div><div><dt>Experiment status</dt><dd>Completed and independently reproduced in GitHub Actions</dd></div></dl></div>
+        <div class="section-header"><div><h2>Evidence and artifacts</h2><p>Open the original results, experiment code, and computational checks.</p></div></div>
+        <div class="source-grid"><a href="https://github.com/SLRICHRIS/photoniq-real-spectral-learning/actions/runs/40720806128" target="_blank" rel="noopener noreferrer"><span>WORKFLOW RUN</span><strong>Successful GitHub Actions execution</strong><small>Five-fold real-data reproduction</small><em>↗</em></a><a href="https://github.com/SLRICHRIS/photoniq-real-spectral-learning/tree/main/results/zenodo_2026/advanced_cv" target="_blank" rel="noopener noreferrer"><span>RESULTS ARCHIVE</span><strong>Predictions and figures</strong><small>CSV, SVG, JSON, diagnostics</small><em>↗</em></a><a href="https://github.com/SLRICHRIS/photoniq-real-spectral-learning/blob/main/tools/advanced_benchmark.py" target="_blank" rel="noopener noreferrer"><span>RESEARCH SOURCE</span><strong>Training / validation implementation</strong><small>Full Python reproducibility code</small><em>↗</em></a><a href="https://github.com/SLRICHRIS/photoniq-real-spectral-learning/blob/main/tools/verify_advanced_results.py" target="_blank" rel="noopener noreferrer"><span>INTEGRITY CHECK</span><strong>Independent metrics verifier</strong><small>Fold and prediction consistency</small><em>↗</em></a></div>
+      </section>
+    </main>
+    <footer class="footer"><span>PhotonIQ <span class="footer-divider">/</span> Experimental spectral learning</span><span>Data: Zenodo 10.5281/zenodo.19237616 <span class="footer-divider">·</span> Research snapshot 28.10.2026</span></footer>
+  </div>
+</div>
+<script src="data/snapshot.js"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>

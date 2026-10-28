@@ -1,0 +1,11 @@
+{
+  "title": "PhotonIQ Research Dashboard",
+  "status": "verified research snapshot",
+  "date": "2026-10-28",
+  "source": "results/zenodo_2026/advanced_cv",
+  "dataset_doi": "10.5281/zenodo.19237616",
+  "live_training_monitor": false,
+  "independent_fabrication_dates": 20,
+  "n_tested_films": 517,
+  "experiment": "Five-fold date-grouped out-of-fold optical density thickness regression"
+}
