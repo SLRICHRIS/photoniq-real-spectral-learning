@@ -30,6 +30,21 @@ jobs:
               if item.filename.lower().endswith(('.csv','.txt','.md')) and item.file_size < 25000:
                   print('PREVIEW',z.read(item).decode('utf-8','replace')[:1500])
           PY
+      - name: Inspect tabular dimensions and labels
+        run: |
+          python - <<'PY'
+          import zipfile,csv,io
+          p='/tmp/zenodo_perovskite_2026.zip'
+          with zipfile.ZipFile(p) as z:
+              for filename in ['Dataset/blade_perovskite_database.csv','Dataset/curvedata_opticaldensity.csv']:
+                  s=z.read(filename).decode('utf-8-sig','replace')
+                  rdr=csv.DictReader(io.StringIO(s))
+                  records=list(rdr)
+                  print('SCHEMA',filename,'rows',len(records),'columns',len(rdr.fieldnames or []))
+                  print('COLUMNS',repr(rdr.fieldnames))
+                  print('FIRST_ROWS',repr(records[:2])[:14000])
+                  print('LAST_ROWS',repr(records[-1:])[:5000])
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: zenodo-2026-original-archive
