@@ -29,6 +29,46 @@ PhotonIQ is a student-developed software research project undertaken in connecti
 
 We do **not** pre-claim novelty or model superiority. A competing Ridge regressor might be better on a small experimental collection; PhotonIQ reports this transparently.
 
+## Results and verification
+
+**Results status (28 October 2026):** The software validation pipeline has passed, but **no model metrics have been produced from the original experimental Mendeley archive**. The table below deliberately separates confirmed engineering checks from scientific measurements. No synthetic fixture scores are presented as experimental results.
+
+### Software validation results
+
+| Verification | Result | Evidence |
+|---|---|---|
+| GitHub Actions CI | **Passed** | [Latest verified workflow run](https://github.com/SLRICHRIS/photoniq-real-spectral-learning/actions/runs/40689364441) |
+| Python automated tests | **8/8 passed in local testing** | [Test suite](tests/) and CI workflow |
+| End-to-end training smoke test | **Passed on synthetic software-test fixture** | [Integration test](tests/test_integration.py) |
+| Colab notebook/source consistency | **Passed by repository checks** | [Notebook checker](tools/check_notebook.py) |
+| Training on the actual perovskite measurements | **Not yet executed** | [Real-data Colab notebook](notebooks/PhotonIQ_Real_Experimental_Training.ipynb) |
+
+These checks demonstrate that the code can execute its intended workflow on test inputs. They **do not** demonstrate successful film-thickness prediction on real experimental specimens.
+
+### Experimental model results — pending real-data training
+
+The predeclared comparison uses **held-out physical films**, with top/middle/bottom scans from any one film kept in the same split. All numbers below remain unreported until the original experimental dataset has been processed and the evaluation artifacts are inspected.
+
+| Method | Held-out MAE (nm) | Held-out RMSE (nm) | Held-out R² |
+|---|---|---|---|
+| Training-set mean baseline | Not yet measured | Not yet measured | Not yet measured |
+| Ridge regression (full spectrum) | Not yet measured | Not yet measured | Not yet measured |
+| Mask-aware CNN — 16 wavelengths | Not yet measured | Not yet measured | Not yet measured |
+| Mask-aware CNN — 32 wavelengths | Not yet measured | Not yet measured | Not yet measured |
+| Mask-aware CNN — 64 wavelengths | Not yet measured | Not yet measured | Not yet measured |
+| Mask-aware CNN — 128 wavelengths | Not yet measured | Not yet measured | Not yet measured |
+
+**Additional required reporting:** independent film counts per split; clustered 95% bootstrap interval for MAE; conformal interval half-width and test-film coverage; source archive SHA-256; random seed; spectral match rate; and any excluded samples. Sparse-channel results correspond to **fixed masks, not adaptive wavelength selection**.
+
+### Producing publishable experimental results
+
+1. Download the **original experimental dataset ZIP** from [Mendeley Data](https://data.mendeley.com/datasets/zt2j5j4v44/3).
+2. Run [PhotonIQ in Google Colab](notebooks/PhotonIQ_Real_Experimental_Training.ipynb) with that archive, or run the CLI command in [Run locally](#run-locally).
+3. Inspect `data_audit.json`, `split_manifest.csv`, and `run_metadata.json` for specimen alignment, sample counts and reproducibility.
+4. Transfer the *actual* model values from `test_metrics.csv` and `conformal_evaluation.json` into this section only after confirming successful real-data training. Do not substitute the synthetic test-fixture output.
+
+The original raw experimental files and trained weights are intentionally excluded from Git version control. Until this evaluation completes, **the central thickness-prediction hypothesis remains untested on real data**.
+
 ### Data and methodology at a glance
 
 ```text
