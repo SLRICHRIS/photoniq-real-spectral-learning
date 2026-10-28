@@ -6,6 +6,14 @@
 
 > **Status: Research implementation verified on a software-only synthetic test fixture; the actual Mendeley experimental ZIP has not yet been trained here. There is no verified real-data accuracy to report.** The distributed notebook requires you to upload the original experimental dataset before training. No simulation-generated measurements are used to train the real-data model.
 
+## Course context
+
+**Course:** Optoelectronic Materials & Devices (23ECE353)  
+**Course faculty:** [Dr. Suma H.](https://www.amrita.edu/faculty/suma-h/), Assistant Professor, Department of Electronics & Communication Engineering  
+**Institution:** Amrita Vishwa Vidyapeetham, School of Engineering, Amritapuri
+
+PhotonIQ is a student-developed software research project undertaken in connection with this course. The faculty listing acknowledges the teaching context; it does not imply institutional endorsement, formal supervision, or experimental validation.
+
 ## Start here: Google Colab
 
 1. Download [`notebooks/PhotonIQ_Real_Experimental_Training.ipynb`](notebooks/PhotonIQ_Real_Experimental_Training.ipynb).
