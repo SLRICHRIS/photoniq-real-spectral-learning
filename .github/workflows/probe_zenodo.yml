@@ -1,0 +1,37 @@
+name: Probe real Zenodo optical dataset
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/probe_zenodo.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-dataset:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download published experimental dataset
+        run: |
+          curl -fL --retry 2 --connect-timeout 15 --max-time 100 \
+            'https://zenodo.org/records/19237616/files/Dataset.zip?download=1' \
+            -o /tmp/zenodo_perovskite_2026.zip
+      - name: Inspect source files and sample measurements
+        run: |
+          python - <<'PY'
+          import zipfile,hashlib
+          p='/tmp/zenodo_perovskite_2026.zip'
+          with open(p,'rb') as f: data=f.read()
+          print('SOURCE DOI 10.5281/zenodo.19237616; SHA256',hashlib.sha256(data).hexdigest(),'bytes',len(data))
+          z=zipfile.ZipFile(p)
+          for item in z.infolist():
+              print('FILE',repr(item.filename),'size',item.file_size)
+              if item.filename.lower().endswith(('.csv','.txt','.md')) and item.file_size < 25000:
+                  print('PREVIEW',z.read(item).decode('utf-8','replace')[:1500])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: zenodo-2026-original-archive
+          path: /tmp/zenodo_perovskite_2026.zip
+          retention-days: 7
