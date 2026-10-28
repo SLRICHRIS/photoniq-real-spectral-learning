@@ -1,0 +1,21 @@
+{
+  "source_doi": "10.5281/zenodo.19237616",
+  "source_sha256": "c79b616d2c998977557cf72017c00f10b60a953570fe939932d025b208a2eb62",
+  "n_valid_samples": 517,
+  "n_wavelengths": 351,
+  "wavelength_min_nm": 300,
+  "wavelength_max_nm": 1000,
+  "train_count": 343,
+  "validation_count": 69,
+  "test_count": 105,
+  "train_fabrication_dates": 12,
+  "val_fabrication_dates": 4,
+  "test_fabrication_dates": 4,
+  "seed": 42,
+  "software_version": {
+    "python": "3.11.17",
+    "torch": "2.5.1+cu124"
+  },
+  "protocol": "Date-grouped holdout. CNN checkpoint chosen on validation. Test evaluated once.",
+  "interpretation": "Measured optical density to thickness on this dataset, not Mendeley validation. OD may correlate with thickness."
+}

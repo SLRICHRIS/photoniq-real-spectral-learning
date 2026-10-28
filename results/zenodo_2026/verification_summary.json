@@ -1,0 +1,33 @@
+{
+  "recomputed_from": "GitHub Actions saved test_predictions.csv",
+  "number_of_test_films": 105,
+  "independent_test_fabrication_dates": 4,
+  "seed": 42,
+  "validation_checkpoint_epoch": 17,
+  "early_stopping_at_epoch": 37,
+  "bootstrap_resamples": 20000,
+  "bootstrap_grouping": "fabrication_date",
+  "percentile_interval": [
+    2.5,
+    97.5
+  ],
+  "descriptive_95pct_ranges": {
+    "cnn_mae_nm": [
+      33.91463407079647,
+      67.18591741573034
+    ],
+    "ridge_mae_nm": [
+      60.75638982954545,
+      95.07962347368421
+    ],
+    "cnn_relative_reduction_percent": [
+      18.37482093111608,
+      49.29622114276904
+    ]
+  },
+  "limitations": [
+    "Four distinct test date groups make clustered intervals unstable.",
+    "One seed and single train/validation/test split.",
+    "Does not establish external or cross-device validity."
+  ]
+}

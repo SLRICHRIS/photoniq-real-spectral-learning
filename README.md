@@ -4,7 +4,7 @@
 
 **Physics-respecting research discipline, real measured spectra, reproducible Colab training.** PhotonIQ learns a regression relationship between experimental UV–Vis spectral measurements and independently measured thin-film thickness. It compares a compact **mask-aware 1D CNN** with conventional regression baselines, evaluates missing-wavelength robustness, and reports uncertainty at the **physical-film** level.
 
-> **Status: Research implementation verified on a software-only synthetic test fixture; the actual Mendeley experimental ZIP has not yet been trained here. There is no verified real-data accuracy to report.** The distributed notebook requires you to upload the original experimental dataset before training. No simulation-generated measurements are used to train the real-data model.
+> **Status:** A real-data baseline and 1D CNN experiment was successfully trained and evaluated on the [Zenodo perovskite optical-density dataset](https://zenodo.org/records/19237616) (517 measured films). The separate Mendeley experiment described in the Colab notebook remains pending because automated source retrieval returned HTTP 401. Do not mix the results of these two datasets.
 
 ## Course context
 
@@ -29,45 +29,27 @@ PhotonIQ is a student-developed software research project undertaken in connecti
 
 We do **not** pre-claim novelty or model superiority. A competing Ridge regressor might be better on a small experimental collection; PhotonIQ reports this transparently.
 
-## Results and verification
+## Results — real experimental optical-density spectra
 
-**Results status (28 October 2026):** The software validation pipeline has passed, but **no model metrics have been produced from the original experimental Mendeley archive**. The table below deliberately separates confirmed engineering checks from scientific measurements. No synthetic fixture scores are presented as experimental results.
+**Completed 28 October 2026** on the independently published [Zenodo dataset (DOI: 10.5281/zenodo.19237616)](https://zenodo.org/records/19237616). Source archive SHA-256: `c79b616d2c998977557cf72017c00f10b60a953570fe939932d025b208a2eb62`.
 
-### Software validation results
+**Experiment:** 517 films; 351 wavelength channels spanning 300–1000 nm. Fabrication-date-grouped split: **343 train / 69 validation / 105 test**, representing **12 / 4 / 4** distinct fabrication dates. Test specimens and their dates were not used in training or selecting the CNN checkpoint.
 
-| Verification | Result | Evidence |
-|---|---|---|
-| GitHub Actions CI | **Passed** | [Latest verified workflow run](https://github.com/SLRICHRIS/photoniq-real-spectral-learning/actions/runs/40689364441) |
-| Python automated tests | **8/8 passed in local testing** | [Test suite](tests/) and CI workflow |
-| End-to-end training smoke test | **Passed on synthetic software-test fixture** | [Integration test](tests/test_integration.py) |
-| Colab notebook/source consistency | **Passed by repository checks** | [Notebook checker](tools/check_notebook.py) |
-| Training on the actual perovskite measurements | **Not yet executed** | [Real-data Colab notebook](notebooks/PhotonIQ_Real_Experimental_Training.ipynb) |
+| Model | Test MAE (nm) ↓ | Test RMSE (nm) ↓ | Test R² ↑ |
+|---|---:|---:|---:|
+| Training-set mean | 165.58 | 210.03 | −0.107 |
+| Ridge regression | 81.49 | 114.82 | 0.669 |
+| **1D CNN** | **50.91** | **74.49** | **0.861** |
 
-These checks demonstrate that the code can execute its intended workflow on test inputs. They **do not** demonstrate successful film-thickness prediction on real experimental specimens.
+**In this single split**, the CNN attained a **37.5% lower MAE** than Ridge. Its selected checkpoint was from epoch **17** (training stopped after 37 epochs). The metrics were independently recalculated from the saved test predictions, matching the GitHub Actions log.
 
-### Experimental model results — pending real-data training
+**Uncertainty and scope:** The test set contains only **four independent fabrication dates**. A descriptive 20,000-resample date-cluster bootstrap of the saved predictions estimated a CNN MAE range of **33.91–67.19 nm** (2.5th–97.5th percentiles). With only four groups, this is **not a strong inferential confidence guarantee**. One random seed and one split do not establish generalization or statistically proven superiority. The inputs were measured optical-density spectra only; thickness and integrated descriptors derived using thickness were excluded. The model is **not physics-informed**, and sparse/adaptive wavelength inference was **not** evaluated here.
 
-The predeclared comparison uses **held-out physical films**, with top/middle/bottom scans from any one film kept in the same split. All numbers below remain unreported until the original experimental dataset has been processed and the evaluation artifacts are inspected.
+**[Detailed Zenodo experimental results](results/zenodo_2026/README.md)** · [Exact numerical metrics](results/zenodo_2026/test_metrics.csv) · [Run metadata](results/zenodo_2026/run_metadata.json) · [Original GitHub Actions run and full artifacts](https://github.com/SLRICHRIS/photoniq-real-spectral-learning/actions/runs/40701586597)
 
-| Method | Held-out MAE (nm) | Held-out RMSE (nm) | Held-out R² |
-|---|---|---|---|
-| Training-set mean baseline | Not yet measured | Not yet measured | Not yet measured |
-| Ridge regression (full spectrum) | Not yet measured | Not yet measured | Not yet measured |
-| Mask-aware CNN — 16 wavelengths | Not yet measured | Not yet measured | Not yet measured |
-| Mask-aware CNN — 32 wavelengths | Not yet measured | Not yet measured | Not yet measured |
-| Mask-aware CNN — 64 wavelengths | Not yet measured | Not yet measured | Not yet measured |
-| Mask-aware CNN — 128 wavelengths | Not yet measured | Not yet measured | Not yet measured |
+### Original Harth–Vesce Mendeley experiment
 
-**Additional required reporting:** independent film counts per split; clustered 95% bootstrap interval for MAE; conformal interval half-width and test-film coverage; source archive SHA-256; random seed; spectral match rate; and any excluded samples. Sparse-channel results correspond to **fixed masks, not adaptive wavelength selection**.
-
-### Producing publishable experimental results
-
-1. Download the **original experimental dataset ZIP** from [Mendeley Data](https://data.mendeley.com/datasets/zt2j5j4v44/3).
-2. Run [PhotonIQ in Google Colab](notebooks/PhotonIQ_Real_Experimental_Training.ipynb) with that archive, or run the CLI command in [Run locally](#run-locally).
-3. Inspect `data_audit.json`, `split_manifest.csv`, and `run_metadata.json` for specimen alignment, sample counts and reproducibility.
-4. Transfer the *actual* model values from `test_metrics.csv` and `conformal_evaluation.json` into this section only after confirming successful real-data training. Do not substitute the synthetic test-fixture output.
-
-The original raw experimental files and trained weights are intentionally excluded from Git version control. Until this evaluation completes, **the central thickness-prediction hypothesis remains untested on real data**.
+The training implementation in [`src/photoniq/`](src/photoniq/) and [Google Colab notebook](notebooks/PhotonIQ_Real_Experimental_Training.ipynb) target a **different** experiment using the original Mendeley archive. That source returned **HTTP 401 Unauthorized** in automated retrieval; this model has **not yet been trained on the Mendeley measurements**. None of the Zenodo results above should be attributed to the Mendeley dataset. The original dataset's training results remain unreported.
 
 ### Data and methodology at a glance
 
@@ -178,4 +160,4 @@ Please cite both the source dataset and the original study when reusing their da
 3. Test cross-batch and cross-instrument generalization with independent measurements, if available.
 4. Introduce actual adaptive wavelength selection and a properly verified optical-physics loss, then run ablations against the honest v1 baseline.
 
-**Repository name suggestion:** `photoniq-real-spectral-learning`.
+**Repository:** [`SLRICHRIS/photoniq-real-spectral-learning`](https://github.com/SLRICHRIS/photoniq-real-spectral-learning).
